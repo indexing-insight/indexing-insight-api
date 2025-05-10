@@ -4,8 +4,14 @@ import urlReportRoutes from './url-report.js';
 import auth from '../middleware/auth.js';
 import domains from '../database/models/domains.js';
 import users from '../database/models/users.js';
+import dbConnect from '../database/mongoose.js';
 
 const router = express.Router();
+router.use(async (req, res, next) => {
+	// Connect to MongoDB
+	await dbConnect();
+	next();
+});
 router.use(auth);
 router.get("/", async (req, res, next)=>{
 	const domains_list = await domains.find({_id:{$in: req.domain_ids}}, "url").exec()

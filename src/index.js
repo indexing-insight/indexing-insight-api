@@ -12,12 +12,10 @@ const NODE_ENV = process.env.NODE_ENV ? `${process.env.NODE_ENV}` : "local";
 dotenv.config({
 	path: `.env.${NODE_ENV}`,
 });
-
 console.log("NODE_ENV:", NODE_ENV);
-const app = express();
 
-// Connect to MongoDB
-dbConnect();
+// Init express app
+const app = express();
 
 // Middleware
 app.use(helmet());
