@@ -1,0 +1,42 @@
+{
+  "name": "indexing-insight-agent",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index",
+    "backup": "npm run build && node dist/backup.js",
+    "build": "babel -s -D -d dist src",
+    "build:dev": "babel -s -D -d dist src",
+    "eslint:fix": "node_modules/eslint/bin/eslint.js --fix src/**/*.js",
+    "test": "mocha mocha.config.js --timeout 30000000 --trace-deprecation",
+    "test-prod": "NODE_ENV=local.production mocha mocha.config.js --timeout 30000000"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.0",
+    "@babel/plugin-transform-runtime": "^7.23.9",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.23.7",
+    "eslint": "^6.8.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.1",
+    "mocha": "^10.3.0",
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "core-js": "^3.34.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.1.0",
+    "mongoose": "^8.8.3",
+    "morgan": "^1.10.0"
+  }
+}
