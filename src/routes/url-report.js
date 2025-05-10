@@ -1,5 +1,5 @@
 import express from "express";
-import pages from "../lib/database/models/pages.js";
+import pages from "../database/models/pages.js";
 import rateLimit from "express-rate-limit";
 
 const router = express.Router();
@@ -9,6 +9,7 @@ const limiterUrlReport = rateLimit({
 	limit: 60, // Limit each API key
 	identifier: 'url-report-limit',
 	standardHeaders: "draft-8",
+	validate:{ xForwardedForHeader: false },
 	keyGenerator: function (req) {
 		return req.api_key_id // API Key
 	},	

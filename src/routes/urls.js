@@ -1,5 +1,5 @@
 import express from "express";
-import pages from "../lib/database/models/pages.js";
+import pages from "../database/models/pages.js";
 import rateLimit from "express-rate-limit";
 const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : null; // $& means the whole matched string

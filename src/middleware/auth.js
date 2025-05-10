@@ -1,5 +1,5 @@
 import crypto, { randomBytes } from 'crypto';
-import apikeys from '../lib/database/models/apikeys.js';
+import apikeys from '../database/models/apikeys.js';
 export function hashKey(key) {
 	return crypto
 		.createHmac("sha256", process.env.API_KEY_SECRET)

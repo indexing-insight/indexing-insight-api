@@ -68,3 +68,4 @@ fly_secrets_dev.sh
 fly.toml
 # Sentry Config File
 .sentryclirc
+.vercel
