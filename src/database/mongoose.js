@@ -27,7 +27,7 @@ if (!MONGODB_URI) {
 
   if (!cached.promise) {
     const opts = {
-      bufferCommands: false,
+      // bufferCommands: false,
       readPreference: "secondary"
     }
 
