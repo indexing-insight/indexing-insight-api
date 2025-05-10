@@ -33,7 +33,7 @@ router.get("/urls/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 
 	const { 
 		url, search_type, segment, 
-		verdict, coverageState, canonical,
+		verdict, coverageState, canonical, new_pages,
 		sort, order,
 	} = req.query
 	let { skip = 0, limit = 100 } = req.query
@@ -76,6 +76,43 @@ router.get("/urls/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 				break
 			case "No Data":
 				filter = { ...filter, is_canonical: null }
+				break
+		}
+	}
+
+	if (new_pages) {
+		switch (new_pages) {
+			case "yesterday":
+				filter = {
+					...filter,
+					createdAt: {
+						$gt: moment.utc().startOf("day").subtract(1, "day").toDate()
+					}
+				}
+				break
+			case "3_days":
+				filter = {
+					...filter,
+					createdAt: {
+						$gt: moment.utc().startOf("day").subtract(3, "day").toDate()
+					}
+				}
+				break
+			case "7_days":
+				filter = {
+					...filter,
+					createdAt: {
+						$gt: moment.utc().startOf("day").subtract(7, "day").toDate()
+					}
+				}
+				break
+			case "30_days":
+				filter = {
+					...filter,
+					createdAt: {
+						$gt: moment.utc().startOf("day").subtract(30, "day").toDate()
+					}
+				}
 				break
 		}
 	}
