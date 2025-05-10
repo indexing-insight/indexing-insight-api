@@ -1,6 +1,7 @@
 import express from "express";
 import pages from "../database/models/pages.js";
 import rateLimit from "express-rate-limit";
+import UrlReport from "../viewmodel/urlReport.js";
 const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') : null; // $& means the whole matched string
 }
@@ -123,7 +124,7 @@ router.get("/urls/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 			{ sort: $sort, skip, limit }
 		)
 		.hint(hint)
-		
+		.lean()
 		.exec()
 
 	const pagination = {
@@ -134,7 +135,7 @@ router.get("/urls/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 		currentpage: Math.ceil(skip / limit) + 1,
 		totalPage: Math.ceil(count_pages / limit)
 	}
-	res.send({ pages: list_pages, pagination })
+	res.send({ pages: list_pages.map(p=>new UrlReport(p).toList()), pagination })
 })
 
 export default router;

@@ -1,6 +1,7 @@
 import express from "express";
 import pages from "../database/models/pages.js";
 import rateLimit from "express-rate-limit";
+import UrlReport from "../viewmodel/UrlReport.js";
 
 const router = express.Router();
 
@@ -33,7 +34,7 @@ router.get("/url-report/:url_id([0-9a-fA-F]{24})?", limiterUrlReport, async (req
 	const page = await pages.findOne(
 		filter,
 		"url domain verdict coverageState indexingState robotsTxtState pageFetchState googleCanonical userCanonical sitemaps is_indexed inspection_link crawledAs last_indexed last_canonical_change last_state_change last_inspection_date createdAt" 
-	).exec();
+	).lean().exec();
 
 	if(!page){
 		return res.status(404).json({ error: 'URL report not found', filter });
@@ -42,7 +43,7 @@ router.get("/url-report/:url_id([0-9a-fA-F]{24})?", limiterUrlReport, async (req
 		return res.status(403).json({ error: 'Domain not authoraized' });
 	}
 
-	res.send(page);
+	res.send(new UrlReport(page).toMap());
 });
 
 export default router;
