@@ -54,6 +54,7 @@ app.get("/", (req, res) => {
 				url: "/v1/url-report/:url_id",
 			},
 		],
+		app_url: process.env.APP_URL
 	});
 });
 
