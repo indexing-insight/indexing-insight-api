@@ -19,21 +19,26 @@ class UrlReport {
 			url,
 			verdict,
 			coverageState,
+			is_canonical,
 			googleCanonical,
 			userCanonical,
 			lastCrawlTime,
-			inspection_link
+			inspection_link,
+			domain,
+			_id
 		} = this.data
 
 		return {
 			url: url || null,
 			is_indexed: IS_INDEXED[verdict] || null,
 			index_status: coverageState || null,
+			is_canonical,
 			google_selected_canonical: googleCanonical || null,
 			user_selected_canonical: userCanonical || null,
 			last_crawl_time: lastCrawlTime || null,
 			days_since_last_crawl: lastCrawlTime ? moment().diff(moment(lastCrawlTime), 'days') : null,
 			inspection_link: inspection_link || null,
+			indexing_insight_link: `${process.env.APP_URL}/domain/${domain}/pages/${_id}`
 		}
 	}
 	toMap() {
@@ -50,6 +55,7 @@ class UrlReport {
 			last_inspection_date,
 			robotsTxtState,
 			pageFetchState,
+			is_canonical,
 			userCanonical,
 			googleCanonical,
 			last_indexed,
@@ -62,6 +68,7 @@ class UrlReport {
 			is_indexed: IS_INDEXED[verdict] || null,
 			index_status: coverageState || null,
 			indexing_allowed: indexingState || null,
+			is_canonical,
 			google_selected_canonical: googleCanonical || null,
 			user_selected_canonical: userCanonical || null,
 			googlebot_primary_crawler: crawledAs || null,
