@@ -165,14 +165,16 @@ router.get("/urls/:domain_id([0-9a-fA-F]{24})", limiterUrls, async (req, res) =>
 		.exec()
 
 	const pagination = {
+		next: skip + limit >= count_pages ? null : `/v1/urls/${domain_id}?skip=${skip + limit}&limit=${limit}`,
+		end: skip + limit >= count_pages,
 		count: count_pages,
 		skip,
 		limit,
-		end: skip + limit >= count_pages,
 		currentpage: Math.ceil(skip / limit) + 1,
-		totalPage: Math.ceil(count_pages / limit)
+		totalPage: Math.ceil(count_pages / limit),
+		
 	}
-	res.send({ pages: list_pages.map(p=>new UrlReport(p).toList()), pagination })
+	res.send({ urls: list_pages.map(p=>new UrlReport(p).toList()), pagination })
 })
 
 export default router;
