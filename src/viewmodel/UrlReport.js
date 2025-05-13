@@ -9,6 +9,29 @@ export const BLOCKED_CRAWLING = {
 	ALLOWED: "No",
 	DISALLOWED: "Yes"
 }
+const INDEXING_STATE = {
+	INDEXING_STATE_UNSPECIFIED: "-",
+	INDEXING_ALLOWED: "Yes",
+	BLOCKED_BY_META_TAG: "No, 'noindex' detected in 'robots' meta tag",
+	BLOCKED_BY_HTTP_HEADER:
+		"No, 'noindex' detected in 'X-Robots-Tag' http header",
+	BLOCKED_BY_ROBOTS_TXT: "No, reserved, no longer in use"
+}
+
+const PAGE_FETCH_STATE = {
+	PAGE_FETCH_STATE_UNSPECIFIED: "-",
+	SUCCESSFUL: "Successful",
+	SOFT_404: "Soft 404",
+	BLOCKED_ROBOTS_TXT: "Blocked by robots.txt",
+	NOT_FOUND: "Not found (404)",
+	ACCESS_DENIED: "Blocked due to unauthorized request (401)",
+	SERVER_ERROR: "Server error (5xx)",
+	REDIRECT_ERROR: "Redirection error",
+	ACCESS_FORBIDDEN: "Blocked due to access forbidden (403)",
+	BLOCKED_4XX: "Blocked due to other 4xx issue (not 403, 404)",
+	INTERNAL_CRAWL_ERROR: "Internal error",
+	INVALID_URL: "Invalid URL"
+}
 class UrlReport {
 	constructor(data) {
 		this.data = data;
@@ -30,9 +53,9 @@ class UrlReport {
 
 		return {
 			url: url || null,
-			is_indexed: IS_INDEXED[verdict] || null,
-			index_status: coverageState || null,
-			is_canonical,
+			index_summary: IS_INDEXED[verdict] || null,
+			index_coverage_state: coverageState || null,
+			canonicals_match: is_canonical,
 			google_selected_canonical: googleCanonical || null,
 			user_selected_canonical: userCanonical || null,
 			last_crawl_time: lastCrawlTime || null,
@@ -43,6 +66,8 @@ class UrlReport {
 	}
 	toMap() {
 		const {
+			_id,
+			domain,
 			url,
 			verdict,
 			coverageState,
@@ -65,21 +90,22 @@ class UrlReport {
 
 		return {
 			url: url || null,
-			is_indexed: IS_INDEXED[verdict] || null,
-			index_status: coverageState || null,
-			indexing_allowed: indexingState || null,
-			is_canonical,
+			index_summary: IS_INDEXED[verdict] || null,
+			index_coverage_state: coverageState || null,
+			page_index_status: INDEXING_STATE[indexingState] || null,
+			canonicals_match: is_canonical,
 			google_selected_canonical: googleCanonical || null,
 			user_selected_canonical: userCanonical || null,
 			googlebot_primary_crawler: crawledAs || null,
 			last_crawl_time: lastCrawlTime || null,
 			days_since_last_crawl: lastCrawlTime ? moment().diff(moment(lastCrawlTime), 'days') : null,
-			page_fetch_status: pageFetchState || null,
+			page_fetch_status: PAGE_FETCH_STATE[pageFetchState] || null,
 			blocked_by_robots_txt: BLOCKED_CRAWLING[robotsTxtState] || null,
 			sitemaps: sitemaps || null,
 			inspection_date: last_inspection_date || null,
 			page_creation: createdAt || null,
 			inspection_link: inspection_link || null,
+			indexing_insight_link: `${process.env.APP_URL}/domain/${domain}/pages/${_id}`,
 
 			last_indexed: last_indexed ? "Yes" : "No",
 			last_indexed_timestamp: last_indexed?.timestamp ? last_indexed?.timestamp : null,

@@ -33,7 +33,7 @@ router.get("/url-report/:url_id([0-9a-fA-F]{24})?", limiterUrlReport, async (req
 	const filter = url_id ? { _id: url_id } : { url }
 	const page = await pages.findOne(
 		filter,
-		"url domain verdict coverageState indexingState robotsTxtState pageFetchState googleCanonical userCanonical sitemaps is_indexed inspection_link crawledAs last_indexed last_canonical_change last_state_change last_inspection_date createdAt" 
+		"url domain verdict coverageState indexingState robotsTxtState pageFetchState googleCanonical userCanonical sitemaps is_indexed inspection_link lastCrawlTime crawledAs last_indexed last_canonical_change last_state_change last_inspection_date createdAt" 
 	).lean().exec();
 
 	if(!page){

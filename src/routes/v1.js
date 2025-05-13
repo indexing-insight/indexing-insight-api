@@ -7,12 +7,16 @@ import users from '../database/models/users.js';
 import dbConnect from '../database/mongoose.js';
 
 const router = express.Router();
+// Connect to MongoDB
 router.use(async (req, res, next) => {
-	// Connect to MongoDB
 	await dbConnect();
 	next();
 });
+
+// Authenticate API Key
 router.use(auth);
+
+// Test API route
 router.get("/", async (req, res, next)=>{
 	const domains_list = await domains.find({_id:{$in: req.domain_ids}}, "url").exec()
 	const user_info = await users.findOne({_id: req.user_id }, "email").exec()
@@ -24,7 +28,10 @@ router.get("/", async (req, res, next)=>{
 		// scopes: req.scopes,
 	})
 })
+// URL report
 router.use(urlReportRoutes);
+
+// List URLs
 router.use(urlsRoutes);
 
 export default router;
