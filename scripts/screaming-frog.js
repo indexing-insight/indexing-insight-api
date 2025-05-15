@@ -16,8 +16,9 @@ const getIndexingInsightUrlReport = new Promise(async (resolve, reject) => {
       );
       // ensure the response was successful
       if (!response.ok) {
+        const {error, message} = await response.json().then(res=>res || {}).catch(e=>{});
         reject(
-          `Failed to fetch response from Indexing Insight API: ${response.statusText}`
+          `Failed to fetch response from Indexing Insight API: ${response.status} ${error}: ${message}`
         );
         return;
       }
@@ -37,8 +38,9 @@ const getIndexingInsightUrlReport = new Promise(async (resolve, reject) => {
    }
 }
 
-return getIndexingInsightUrlReport.then((objData) => {
-    return seoSpider.data(Object.keys(objData).map(key=>objData[key]));
+return getIndexingInsightUrlReport
+  .then((objData) => {
+    return seoSpider.data(Object.keys(objData).map(key=>objData[key] ? objData[key].toString() : "NULL"));
   })
   .catch((error) => {
     return seoSpider.error(error);

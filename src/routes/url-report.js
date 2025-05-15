@@ -27,8 +27,12 @@ router.get(
 	// limiterUrlReport,
 	async (req, res) => {
 		const { url_id } = req.params;
-		const { url } = req.query;
+		const { url, fields } = req.query;
 
+		let projection
+		if(fields){
+			projection = fields.split(',').map(f=>f.trim())
+		}
 		if (!url_id && !url) {
 			return res.status(400).json({
 				error: "missing_parameter",
@@ -63,7 +67,7 @@ router.get(
 			});
 		}
 
-		res.send(new UrlReport(page).toMap());
+		res.send(new UrlReport(page).toMap(projection));
 	}
 );
 
