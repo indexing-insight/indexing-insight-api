@@ -24,7 +24,7 @@ router.get("/", async (req, res, next)=>{
 		_id: req.api_key_id,
 		api_key_label: req.api_key_label,
 		account: user_info,
-		domains_access: domains_list,
+		websites_access: domains_list,
 		// scopes: req.scopes,
 	})
 })

@@ -8,22 +8,6 @@ const escapeRegExp = (string) => {
 
 const router = express.Router();
 
-const limiterUrlReport = rateLimit({
-	windowMs: 60 * 1000, // 1 minute
-	limit: 60, // Limit each API key
-	identifier: "url-report-limit",
-	standardHeaders: "draft-8",
-	keyGenerator: function (req) {
-		return req.api_key_id; // API Key
-	},
-	handler: function (req, res, next) {
-		res.status(429).json({
-			message: "UrlReport. Too many requests.",
-			limiter: "60 requests per minute",
-		});
-	},
-});
-
 router.get("/index-coverage/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 	const { domain_id } = req.params;
 	// check for authorization

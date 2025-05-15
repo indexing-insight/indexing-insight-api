@@ -19,7 +19,11 @@ export const generateApiKey = () => {
 export default async function (req, res, next) {
 	const authHeader = req.headers["authorization"];
 	if (!authHeader || !authHeader.startsWith("Bearer ")) {
-		return res.status(401).json({ error: "Unauthorized" });
+		return res.status(401).json({ 
+			error: "unauthorized",
+			message: "API key is missing.",
+			status: 401
+		});
 	}
 
 	const rawKey = authHeader.split(" ")[1];
@@ -38,7 +42,11 @@ export default async function (req, res, next) {
 		}
 	);
 	if (!key || !!key?.revoked) {
-		return res.status(403).json({ error: "Invalid API Key" });
+		return res.status(403).json({
+			error: "forbidden",
+			message: "API key is invalid.",
+			status: 403
+		});
 	}
 
 	req.api_key_id = key._id.toString();
