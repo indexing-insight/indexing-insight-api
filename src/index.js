@@ -13,7 +13,6 @@ const NODE_ENV = process.env.NODE_ENV ? `${process.env.NODE_ENV}` : "local";
 dotenv.config({
 	path: `.env.${NODE_ENV}`,
 });
-console.log("NODE_ENV:", NODE_ENV);
 
 // Init express app
 const app = express();
@@ -46,7 +45,8 @@ app.get("/", (req, res) => {
 	res.send({
 		message: "Welcome to Indexing Insight API",
 		app_url: process.env.APP_URL,
-		version
+		version,
+		env: NODE_ENV
 	});
 });
 
@@ -68,6 +68,7 @@ app.use(errorHandler);
 if (NODE_ENV === "local") {
 	const PORT = process.env.PORT || 3000;
 	app.listen(PORT, () => {
+		console.log("NODE_ENV:", NODE_ENV);
 		console.log(`Server running on http://localhost:${PORT}`);
 		console.log("――――――");
 	});

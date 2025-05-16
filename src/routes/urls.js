@@ -34,6 +34,7 @@ router.get(
 			return res.status(403).json({
 				error: "forbidden",
 				message: "You are not authorized to access this website.",
+				status: 403
 			});
 		}
 
