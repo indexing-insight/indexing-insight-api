@@ -49,21 +49,23 @@ router.get(
 			.lean()
 			.exec();
 
-		if (!req.domain_ids?.includes(page?.domain)) {
-			return res.status(403).json({
-				error: "forbidden",
-				message: "You are not authorized to access this URL report.",
-			});
-		}
-
 		if (!page) {
 			return res.status(404).json({
 				error: "not_found",
 				message: "URL report not found.",
+				status: 404,
 				details: {
 					url_id,
 					url,
 				},
+			});
+		}
+
+		if (!req.domain_ids?.includes(page?.domain)) {
+			return res.status(403).json({
+				error: "forbidden",
+				message: "You are not authorized to access this URL report.",
+				status: 403,
 			});
 		}
 

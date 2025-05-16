@@ -4,6 +4,7 @@ const PAGE_URL = document.URL;
 
 const getIndexingInsightUrlReport = new Promise(async (resolve, reject) => {
    try {
+     // send request to Indexing Insight API
      const response = await fetch(
         `${API_BASE_URL}/v1/url-report?url=${PAGE_URL}`,
         {
@@ -18,15 +19,14 @@ const getIndexingInsightUrlReport = new Promise(async (resolve, reject) => {
       if (!response.ok) {
         const {error, message} = await response.json().then(res=>res || {}).catch(e=>{});
         reject(
-          `Failed to fetch response from Indexing Insight API: ${response.status} ${error}: ${message}`
+          `Failed to fetch response from Indexing Insight API: \n${response.status} ${error}: ${message}`
         );
         return;
       }
 
-      // ensure we have a response from the ChatGPT API to our question
+      // ensure we have a response
       const data = await response.json();
-
-      if (!(data && data.url)) {
+      if (!(typeof data === "object" && Object.keys(data).length > 0)) {
         reject('No response was returned from Indexing Insight API');
         return;
       }
