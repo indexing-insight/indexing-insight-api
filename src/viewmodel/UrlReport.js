@@ -95,7 +95,7 @@ class UrlReport {
 			index_summary: IS_INDEXED[verdict] || null,
 			index_coverage_state: coverageState || null,
 			indexing_allowed: INDEXING_STATE[indexingState] || null,
-			page_index_status: indexingState || null,
+			// page_index_status: indexingState || null,
 			canonicals_match: is_canonical,
 			google_selected_canonical: googleCanonical || null,
 			user_selected_canonical: userCanonical || null,

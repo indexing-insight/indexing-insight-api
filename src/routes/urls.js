@@ -6,6 +6,10 @@ const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : null; // $& means the whole matched string
 };
 
+const VERDICT = {
+	indexed: "PASS",
+	not_indexed: "NEUTRAL"
+}
 const router = express.Router();
 
 // const limiterUrls = rateLimit({
@@ -45,11 +49,14 @@ router.get(
 			limit = 100;
 		}
 
-		// const {
-		// 	url, search_type, segment,
-		// 	verdict, coverageState, canonical, new_pages,
+		const {
+		// 	url, search_type, 
+			index_summary,
+			segment,
+			index_coverage_state
+		// 	verdict, canonical, new_pages,
 		// 	sort, order,
-		// } = req.query
+		} = req.query
 		let filter = { domain: domain_id, state: "mapped" };
 
 		// if (url) {
@@ -66,16 +73,15 @@ router.get(
 		// 			break
 		// 	}
 		// }
-		// if (segment) {
-		// 	filter = { ...filter, preferred: { $regex: `^${escapeRegExp(segment)}` }  }
-		// }
-
-		// if (verdict) {
-		// 	filter = { ...filter, verdict }
-		// }
-		// if (coverageState) {
-		// 	filter = { ...filter, coverageState }
-		// }
+		if (segment) {
+			filter = { ...filter, preferred: { $regex: `^${escapeRegExp(segment)}` }  }
+		}
+		if (index_summary) {
+			filter = { ...filter, verdict: VERDICT[index_summary] }
+		}
+		if (index_coverage_state) {
+			filter = { ...filter, coverageState: index_coverage_state }
+		}
 		// if (canonical) {
 		// 	switch (canonical) {
 		// 		case "Matches":
