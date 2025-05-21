@@ -108,7 +108,7 @@ class UrlReport {
 			blocked_by_robots_txt: BLOCKED_CRAWLING[robotsTxtState] || null,
 			sitemaps: sitemaps || null,
 			inspection_date: last_inspection_date || null,
-			page_creation: createdAt || null,
+			page_detection: createdAt || null,
 			inspection_link: inspection_link || null,
 			indexing_insight_link: `${process.env.APP_URL}/domain/${domain}/pages/${_id}`,
 
