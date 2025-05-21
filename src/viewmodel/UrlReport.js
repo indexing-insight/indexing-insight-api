@@ -112,28 +112,28 @@ class UrlReport {
 			inspection_link: inspection_link || null,
 			indexing_insight_link: `${process.env.APP_URL}/domain/${domain}/pages/${_id}`,
 
-			last_indexed: last_indexed ? "Yes" : "No",
-			last_indexed_timestamp: last_indexed?.timestamp
+			previously_indexed: last_indexed ? "Yes" : "No",
+			previously_indexed_timestamp: last_indexed?.timestamp
 				? last_indexed?.timestamp
 				: null,
-			last_indexed_inspection_link: last_indexed?.inspection
+			previously_indexed_link: last_indexed?.inspection
 				? last_indexed?.inspection
 				: null,
 
-			last_canonical_change: last_canonical_change ? "Yes" : "No",
-			last_google_selected_canonical:
+			canonical_changed: last_canonical_change ? "Yes" : "No",
+			canonical_changed_google_canonical:
 				last_canonical_change?.googleCanonical || null,
-			last_user_selected_canonical:
+			canonical_changed_user_canonical:
 				last_canonical_change?.userCanonical || null,
-			last_canonical_change_timestamp:
+			canonical_changed_timestamp:
 				last_canonical_change?.timestamp || null,
-			last_canonical_change_inspection_link:
+			canonical_changed_link:
 				last_canonical_change?.inspection || null,
 
-			last_blocked_by_robots_txt: last_crawling_blocked ? "Yes" : "No",
-			last_blocked_by_robots_txt_timestamp:
+			ever_blocked_by_robots_txt: last_crawling_blocked ? "Yes" : "No",
+			ever_blocked_by_robots_txt_timestamp:
 				last_crawling_blocked?.timestamp || null,
-			last_blocked_by_robots_txt_inspection_link:
+			ever_blocked_by_robots_txt_link:
 				last_crawling_blocked?.inspection || null,
 		};
 
