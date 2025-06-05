@@ -28,7 +28,7 @@ app.use(
 	rateLimit({
 		windowMs: 1000 * 60, // 60 seconds
 		limit: 60, // 60 requests
-		identifier: "master-limit",
+		identifier: "indexinginsight-limit",
 		standardHeaders: "draft-8",
 		validate: { xForwardedForHeader: false },
 		handler: function (req, res, next) {

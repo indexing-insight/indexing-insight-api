@@ -1,6 +1,6 @@
 import express from "express";
 import pages from "../database/models/pages.js";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import UrlReport from "../viewmodel/UrlReport.js";
 
 const router = express.Router();

@@ -1,7 +1,7 @@
 import express from "express";
 import pages from "../database/models/pages.js";
 import domains from "../database/models/domains.js";
-import rateLimit from "express-rate-limit";
+
 const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : null; // $& means the whole matched string
 };
