@@ -45,6 +45,7 @@ app.get("/", (req, res) => {
 	res.send({
 		message: "Welcome to Indexing Insight API",
 		app_url: process.env.APP_URL,
+		documentation_url: "https://docs.indexinginsight.com/",
 		version,
 		env: NODE_ENV
 	});
