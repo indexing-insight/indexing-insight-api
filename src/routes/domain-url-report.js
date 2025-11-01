@@ -2,7 +2,6 @@ import express from "express";
 import domains from "../database/models/domains.js";
 // import rateLimit from "express-rate-limit";
 import UrlReport from "../viewmodel/UrlReport.js";
-import { getDomain, getHostname } from "tldts";
 import getDomainURLsModel from "../database/models/urls.js";
 
 const router = express.Router();
@@ -25,28 +24,15 @@ const router = express.Router();
 // });
 
 router.get(
-	"/url-report",
+	"/domain/:domain_id([0-9a-fA-F]{24})/url-id/:url_id([0-9a-fA-F]{24})",
 	// limiterUrlReport,
 	async (req, res) => {
-		const { url, fields } = req.query;
+		const { domain_id, url_id } = req.params;
+		const { fields } = req.query;
 
-		let projection
-		if(fields){
-			projection = fields.split(',').map(f=>f.trim())
-		}
-		if (!url) {
-			return res.status(400).json({
-				error: "missing_parameter",
-				message: "'url' in query string must be provided.",
-				status: 400,
-			});
-		}
-		
-		const url_host = getHostname(url);
-		const url_domain = getDomain(url);
-		// console.log(url_domain, url_host)
-		const domain_info = await domains.findOne({url: {$in:[url_host, url_domain]}},"_id url urls_collection",{srot:{url:1}}).lean()
-		// console.log(domain_info)
+		// check authorized
+		const domain_info = await domains.findOne({_id: domain_id},"_id url urls_collection").lean()
+		console.log(req.domain_ids, domain_info)
 		if (!req.domain_ids?.includes(domain_info?._id)) {
 			return res.status(403).json({
 				error: "forbidden",
@@ -54,9 +40,15 @@ router.get(
 				status: 403,
 			});
 		}
+		// get urls collections
 		const urlsColleciton = getDomainURLsModel(domain_info)
-		
-		const filter = { state: "mapped",  url };
+
+		let projection
+		if(fields){
+			projection = fields.split(',').map(f=>f.trim())
+		}
+
+		const filter = { state: "mapped", _id: url_id };
 		const page = await urlsColleciton
 			.findOne(
 				filter,
@@ -71,11 +63,12 @@ router.get(
 				message: "URL report not found.",
 				status: 404,
 				details: {
-					url,
+					domain_id,
+					url_id
 				},
 			});
 		}
-
+		
 		res.send(new UrlReport(page).toMap(projection));
 	}
 );

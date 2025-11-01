@@ -1,6 +1,7 @@
 import express from 'express';
 import urlsRoutes from './urls.js';
 import urlReportRoutes from './url-report.js';
+import domainUrlReport from './domain-url-report.js'
 import auth from '../middleware/auth.js';
 import domains from '../database/models/domains.js';
 import users from '../database/models/users.js';
@@ -29,6 +30,7 @@ router.get("/", async (req, res, next)=>{
 	})
 })
 // URL report
+router.use(domainUrlReport);
 router.use(urlReportRoutes);
 
 // List URLs
