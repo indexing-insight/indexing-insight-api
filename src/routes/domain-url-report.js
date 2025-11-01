@@ -32,7 +32,7 @@ router.get(
 
 		// check authorized
 		const domain_info = await domains.findOne({_id: domain_id},"_id url urls_collection").lean()
-		console.log(req.domain_ids, domain_info)
+		// console.log(req.domain_ids, domain_info)
 		if (!req.domain_ids?.includes(domain_info?._id)) {
 			return res.status(403).json({
 				error: "forbidden",
@@ -68,7 +68,7 @@ router.get(
 				},
 			});
 		}
-		
+
 		res.send(new UrlReport(page).toMap(projection));
 	}
 );
