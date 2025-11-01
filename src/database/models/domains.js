@@ -36,7 +36,11 @@ const DomainSchema = new mongoose.Schema({
 	permission:[{
 		_id: ObjectId,
 		role: String
-	}]
+	}],
+	urls_collection: {
+		default: 'shared',
+		type: String
+	}
 }, { timestamps: true,strict: false })
 
 DomainSchema.index({ url: 1 }, { unique: true });

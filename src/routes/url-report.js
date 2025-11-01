@@ -29,6 +29,8 @@ router.get(
 		const { url_id } = req.params;
 		const { url, fields } = req.query;
 
+		// TODO: use private collections
+
 		let projection
 		if(fields){
 			projection = fields.split(',').map(f=>f.trim())

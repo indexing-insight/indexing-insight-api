@@ -1,6 +1,6 @@
 import express from "express";
-import pages from "../database/models/pages.js";
 import domains from "../database/models/domains.js";
+import getDomainURLsModel from "../database/models/urls.js";
 
 const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : null; // $& means the whole matched string
@@ -26,12 +26,15 @@ router.get("/index-coverage/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 		};
 	}
 
+	const urlCollecitons = getDomainURLsModel(domain_info)
 	// get list of coveragestate per not indexed pages
-	const not_indexed_states = await pages
+	const not_indexed_states = await urlCollecitons
 		.aggregate([
 			{
 				$match: {
-					domain: domain_info._id,
+					...domain_info.urls_collection !== 'private' && {
+						domain: domain_info._id
+					},
 					preferred: { $ne: null },
 					verdict: "NEUTRAL",
 					...filter,
@@ -60,11 +63,13 @@ router.get("/index-coverage/:domain_id([0-9a-fA-F]{24})", async (req, res) => {
 		])
 		.exec();
 
-	const metrics = await pages
+	const metrics = await urlCollecitons
 		.aggregate([
 			{
 				$match: {
-					domain: domain_info._id,
+					...domain_info.urls_collection !== 'private' && {
+						domain: domain_info._id
+					},
 					preferred: { $ne: null },
 					...filter,
 				},

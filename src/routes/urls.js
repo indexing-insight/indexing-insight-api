@@ -1,7 +1,8 @@
 import express from "express";
-import pages from "../database/models/pages.js";
 // import rateLimit from "express-rate-limit";
 import UrlReport from "../viewmodel/UrlReport.js";
+import getDomainURLsModel from "../database/models/urls.js";
+import domains from "../database/models/domains.js";
 
 const escapeRegExp = (string) => {
 	return string ? string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") : null; // $& means the whole matched string
@@ -43,6 +44,8 @@ router.get(
 			});
 		}
 
+		const domain_info = await domains.findOne({ _id: domain_id }).exec();
+		const urlCollecitons = getDomainURLsModel(domain_info)
 		let { skip = 0, limit = 100 } = req.query;
 		skip = parseInt(skip);
 		limit = parseInt(limit) || 100;
@@ -58,7 +61,12 @@ router.get(
 		// 	verdict, canonical, new_pages,
 		// 	sort, order,
 		} = req.query
-		let filter = { domain: domain_id, state: "mapped" };
+		let filter = { 
+			...domain_info.urls_collection !== 'private' && {
+				domain: domain_id
+			}, 
+			state: "mapped" 
+		};
 
 		// if (url) {
 		// 	switch (search_type) {
@@ -137,7 +145,7 @@ router.get(
 		let $sort = {
 			url: 1,
 		};
-		let hint = "domain_1_url_1_preferred_1";
+		let hint = "url_preferred";
 		// if (sort) {
 		// 	switch (sort) {
 		// 		case "Index Status":
@@ -170,8 +178,8 @@ router.get(
 
 		// console.log({filter, $sort, hint})
 
-		const count_pages = await pages.countDocuments(filter).exec();
-		const list_pages = await pages
+		const count_pages = await urlCollecitons.countDocuments(filter).exec();
+		const list_pages = await urlCollecitons
 			.find(
 				filter,
 				"url domain verdict coverageState lastCrawlTime is_canonical googleCanonical userCanonical inspection_link is_indexed",
